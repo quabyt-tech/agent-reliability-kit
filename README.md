@@ -10,12 +10,21 @@ Apache-2.0. Five dependencies (pydantic, pyyaml, httpx, rich, typer), no vendor 
 
 ## Install
 
-With [uv](https://docs.astral.sh/uv/), add it to your project, or run the CLI without installing anything:
+With [uv](https://docs.astral.sh/uv/), add it to your Python project:
 
 ```bash
 uv add git+https://github.com/quabyt-tech/agent-reliability-kit
+```
+
+`uv add` needs a `pyproject.toml` in the current folder or a parent; run `uv init` first if you don't have one. Use this when your agent is Python and the evals run with your other tests.
+
+Or run the CLI without installing anything:
+
+```bash
 uvx --from git+https://github.com/quabyt-tech/agent-reliability-kit arkit --help
 ```
+
+`uvx` runs from a temporary environment and leaves your folder untouched. That environment holds only the kit, so it suits HTTP targets and the `template`, `report` and `diff` commands; a Python agent target needs its own dependencies, so use `uv add` for that.
 
 Python 3.11 to 3.14. PyYAML doesn't publish 3.15 builds yet, so on 3.15 it needs a C compiler to install. A PyPI release is coming; until then, install from GitHub as above.
 
