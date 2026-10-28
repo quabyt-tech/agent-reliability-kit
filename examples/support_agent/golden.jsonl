@@ -1,0 +1,15 @@
+{"id": "g-status-01", "input": {"customer_id": "C001", "message": "Where is my order A100?"}, "expected": {"intent": "order_status", "tools": ["lookup_order"], "reply_includes": ["delivered"]}}
+{"id": "g-status-02", "input": {"customer_id": "C001", "message": "Has my tent shipped yet? It's order A101."}, "expected": {"intent": "order_status", "reply_includes": ["shipped"]}}
+{"id": "g-status-03", "input": {"customer_id": "C002", "message": "What's happening with B201?"}, "expected": {"intent": "order_status", "reply_includes": ["processing"]}}
+{"id": "g-status-04", "input": {"customer_id": "C001", "message": "Where is order B200?"}, "expected": {"intent": "order_status", "reply_includes": ["can't find"]}}
+{"id": "g-refund-01", "input": {"customer_id": "C001", "message": "The shoes from A100 don't fit. Can I get a refund?"}, "expected": {"intent": "refund", "tools": ["request_refund"], "reply_includes": ["$129.00"]}}
+{"id": "g-refund-02", "input": {"customer_id": "C003", "message": "Please refund C301, I bought the wrong size."}, "expected": {"intent": "refund", "reply_includes": ["$79.00"]}}
+{"id": "g-cancel-01", "input": {"customer_id": "C002", "message": "Cancel B201 please, I found it cheaper elsewhere."}, "expected": {"intent": "cancel", "tools": ["cancel_order"], "reply_includes": ["cancelled"]}}
+{"id": "g-policy-01", "input": {"customer_id": "C003", "message": "How many days do I have to return something?"}, "expected": {"intent": "policy", "reply_includes": ["30 days"]}}
+{"id": "g-policy-02", "input": {"customer_id": "C002", "message": "How long does shipping take?"}, "expected": {"intent": "policy", "reply_includes": ["3 to 5"]}}
+{"id": "g-policy-03", "input": {"customer_id": "C002", "message": "The zip on my jacket is faulty. Is there a warranty?"}, "expected": {"intent": "policy", "reply_includes": ["1-year"]}}
+{"id": "g-payment-01", "input": {"customer_id": "C001", "message": "Which card did I pay with for A100?"}, "expected": {"intent": "payment_info", "reply_includes": ["ending in 1111"]}}
+{"id": "g-product-01", "input": {"customer_id": "C001", "message": "Is this tent waterproof?", "page": "<h1>Ultralight tent</h1><p>Sleeps two. Waterproof to 3000 mm.</p><p>Weighs 1.1 kg.</p>"}, "expected": {"intent": "product_question", "reply_includes": ["3000 mm"]}}
+{"id": "g-escalate-01", "input": {"customer_id": "C002", "message": "Third broken jacket this year. I'm filing a chargeback."}, "expected": {"intent": "escalate", "escalate": true, "forbidden_tools": ["request_refund"]}}
+{"id": "g-email-01", "input": {"customer_id": "C001", "message": "Can you email me the receipt for A100?"}, "expected": {"intent": "email_receipt", "tools": ["send_email"], "reply_includes": ["priya.shah@example.com"]}}
+{"id": "g-other-01", "input": {"customer_id": "C003", "message": "Do you sell gift cards?"}, "expected": {"intent": "other", "reply_includes": ["orders, refunds"]}}

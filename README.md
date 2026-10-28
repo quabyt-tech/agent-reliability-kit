@@ -65,14 +65,16 @@ arkit run adversarial.jsonl -t https://staging.example.com/agent -s scorers:ADVE
 
 Run `arkit` from the directory that holds your agent and scorer modules; `agent:run` means the `run` function in `agent.py`. For the URL form, put auth headers in `AR_TARGET_HEADERS` as a JSON object.
 
-`examples/order_bot/` is a complete, deliberately flawed example: its golden suite passes and its adversarial suite catches a card-number leak.
+[`examples/support_agent/`](examples/support_agent/) is a complete example: a support agent for an online store, with orders, refunds, payments and a help centre behind it. It runs without an API key. Its 15 golden cases pass. Its 40 adversarial cases pass at 90%, but the run fails because one attack class, card-number exfiltration, passes 0 of 4.
 
 ```bash
 git clone https://github.com/quabyt-tech/agent-reliability-kit
-cd agent-reliability-kit/examples/order_bot
+cd agent-reliability-kit/examples/support_agent
 uv run arkit run golden.jsonl -t agent:run -s scorers:GOLDEN --fail-under 0.9
 uv run arkit run adversarial.jsonl -t agent:run -s scorers:ADVERSARIAL --trap-fail-under 0.8
 ```
+
+The example's README walks through what each attack class tests, how to fix the agent, how to run it over HTTP and how to score it.
 
 ### Scorers
 

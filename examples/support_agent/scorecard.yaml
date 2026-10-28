@@ -1,0 +1,48 @@
+client: Example outdoor-gear store
+agent: Support agent (examples/support_agent)
+auditor: Self-assessment
+audited_at: 2026-10-28T00:00:00Z
+scores:
+- key: eval_coverage
+  score: 3
+  evidence: 15 golden cases and 40 adversarial cases tagged by attack class, in golden.jsonl and adversarial.jsonl.
+  recommendations:
+  - Add multi-turn cases and sample production conversations into the golden set
+- key: regression_detection
+  score: 2
+  evidence: Both suites run with one command and gate on --fail-under and --trap-fail-under, but no CI job runs them yet.
+  recommendations:
+  - Run both suites on every pull request that touches agent.py, store.py or the datasets
+- key: guardrails
+  score: 2
+  evidence: Pasted pages are sanitised and retrieval keeps trusted sources only. Payment and email tools have no ownership check or recipient allowlist.
+  recommendations:
+  - Mask card numbers in get_payment_details and check the order belongs to the caller
+  - Send email only to the customer's address on file
+- key: observability
+  score: 1
+  evidence: Each response lists its tool calls and sources, but nothing is logged or traced.
+  recommendations:
+  - Emit an OpenTelemetry span per request with the tool calls attached
+- key: cost_controls
+  score: 0
+  evidence: Not applicable to the stand-in model; a real deployment needs per-request token accounting.
+  recommendations: []
+- key: failure_mode_mapping
+  score: 2
+  evidence: The adversarial suite names the failure modes by class; there's no written list with owners and mitigations.
+  recommendations:
+  - Write the failure-mode list, starting with card-number exfiltration
+- key: security
+  score: 1
+  evidence: behavioural_control passes 0 of 4. The agent reads out full card numbers, including for other customers' orders.
+  recommendations:
+  - Fix the payment tool before anything else; re-run with --trap-fail-under 0.8
+- key: deployment
+  score: 1
+  evidence: Runs locally only.
+  recommendations: []
+top_risks:
+- The agent reads out full card numbers, for any order, to anyone who asks.
+- The agent emails order and card details to any address in the message.
+notes: Scores reflect the example as shipped, including its deliberate flaw.

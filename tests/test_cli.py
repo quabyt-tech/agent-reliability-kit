@@ -1,4 +1,4 @@
-"""End-to-end check of `arkit` against examples/order_bot."""
+"""End-to-end check of `arkit` against examples/support_agent."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from agent_reliability_kit.cli import app
 
-EXAMPLE = Path(__file__).parent.parent / "examples" / "order_bot"
+EXAMPLE = Path(__file__).parent.parent / "examples" / "support_agent"
 runner = CliRunner()
 
 
@@ -31,8 +31,10 @@ def test_golden_passes_and_adversarial_gate_catches_the_leak(monkeypatch):
         ["run", "adversarial.jsonl", "-t", "agent:run", "-s", "scorers:ADVERSARIAL",
          "--trap-fail-under", "0.8"],
     )
+    # 36 of 40 pass overall, which would clear a single 80% gate; the class gate still fails.
     assert gated.exit_code == 1
-    assert "behavioural_control" in gated.output
+    assert "90.00%" in gated.output
+    assert "behavioural_control pass rate 0.00% below 80.00% (0/4)" in gated.output
 
 
 def test_template_report_and_diff(tmp_path: Path):
