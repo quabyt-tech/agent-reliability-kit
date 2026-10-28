@@ -31,6 +31,21 @@ app = typer.Typer(help="Agent Reliability Kit: evals and scorecards.", no_args_i
 console = Console()
 
 
+def _print_version(value: bool) -> None:
+    if value:
+        typer.echo(__version__)
+        raise typer.Exit()
+
+
+@app.callback()
+def main(
+    _version: bool = typer.Option(
+        False, "--version", callback=_print_version, is_eager=True, help="Print the version."
+    ),
+) -> None:
+    pass
+
+
 @app.command()
 def version() -> None:
     """Print the package version."""

@@ -24,7 +24,15 @@ Or run the CLI without installing anything:
 uvx --from git+https://github.com/quabyt-tech/agent-reliability-kit arkit --help
 ```
 
-`uvx` runs from a temporary environment and leaves your folder untouched. That environment holds only the kit, so it suits HTTP targets and the `template`, `report` and `diff` commands; a Python agent target needs its own dependencies, so use `uv add` for that.
+`uvx` runs from a temporary environment and leaves your folder untouched; it doesn't put `arkit` on your PATH. That environment holds only the kit, so it suits HTTP targets and the `template`, `report` and `diff` commands; a Python agent target needs its own dependencies, so use `uv add` for that.
+
+To have a plain `arkit` command everywhere, install it as a tool. Like `uvx`, it holds only the kit.
+
+```bash
+uv tool install git+https://github.com/quabyt-tech/agent-reliability-kit
+```
+
+If uv says its tool folder isn't on your PATH, run `uv tool update-shell` and open a new terminal. Upgrade later with `uv tool upgrade agent-reliability-kit`.
 
 Python 3.11 or newer. A PyPI release is coming; until then, install from GitHub as above.
 

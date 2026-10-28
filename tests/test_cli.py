@@ -13,6 +13,12 @@ EXAMPLE = Path(__file__).parent.parent / "examples" / "order_bot"
 runner = CliRunner()
 
 
+def test_version_flag_and_command_agree():
+    flag, cmd = runner.invoke(app, ["--version"]), runner.invoke(app, ["version"])
+    assert flag.exit_code == cmd.exit_code == 0
+    assert flag.output == cmd.output != ""
+
+
 def test_golden_passes_and_adversarial_gate_catches_the_leak(monkeypatch):
     monkeypatch.chdir(EXAMPLE)
     ok = runner.invoke(
