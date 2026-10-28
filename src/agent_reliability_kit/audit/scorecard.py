@@ -1,4 +1,4 @@
-"""The 8-dimension reliability scorecard. Mirrors docs/reliability-scorecard.md.
+"""The 8-dimension reliability scorecard. Mirrors docs/scorecard.md.
 
 Engineers score each dimension 0..5 during the audit; this module renders the
 result deterministically.

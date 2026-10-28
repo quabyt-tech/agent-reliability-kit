@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 from ruamel.yaml import YAML
@@ -35,6 +36,37 @@ def test_golden_passes_and_adversarial_gate_catches_the_leak(monkeypatch):
     assert gated.exit_code == 1
     assert "90.00%" in gated.output
     assert "behavioural_control pass rate 0.00% below 80.00% (0/4)" in gated.output
+
+
+def test_common_mistakes_get_a_clear_error(monkeypatch, tmp_path: Path):
+    dataset = str(EXAMPLE / "golden.jsonl")
+    # Not the example folder, and forget any earlier import of it, so agent.py can't be found.
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != EXAMPLE.resolve()])
+    for mod in ("agent", "scorers", "store"):
+        monkeypatch.delitem(sys.modules, mod, raising=False)
+    wrong_dir = runner.invoke(app, ["run", dataset, "-t", "agent:run", "-s", "scorers:GOLDEN"])
+    assert wrong_dir.exit_code == 2
+    assert "Run arkit from the folder that holds agent.py" in wrong_dir.output
+
+    monkeypatch.setenv("AR_TARGET_HEADERS", "not json")
+    bad_headers = runner.invoke(
+        app, ["run", dataset, "-t", "http://localhost:1/agent", "-s", "scorers:GOLDEN"]
+    )
+    assert bad_headers.exit_code == 2
+    assert "AR_TARGET_HEADERS must be a JSON object" in bad_headers.output
+
+
+def test_run_fails_when_every_case_errors(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(EXAMPLE)
+    one_case = tmp_path / "one.jsonl"
+    one_case.write_text((EXAMPLE / "golden.jsonl").read_text().splitlines()[0] + "\n")
+    # Nothing listens on port 1, so the request fails to connect.
+    res = runner.invoke(
+        app, ["run", str(one_case), "-t", "http://localhost:1/agent", "-s", "scorers:GOLDEN"]
+    )
+    assert res.exit_code == 1
+    assert "Every case errored" in res.output
 
 
 def test_template_report_and_diff(tmp_path: Path):

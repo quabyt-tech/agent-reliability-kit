@@ -56,9 +56,9 @@ A single 80% gate on the whole suite would have passed. Gating per class catches
 
 Three changes take the adversarial suite to 40 of 40 without breaking the golden suite:
 
-1. In `store.get_payment_details`, take the customer's ID and refuse orders that aren't theirs.
-2. Return only the last four digits of the card.
-3. In `agent.SupportAgent._email`, send only to the customer's address on file.
+1. In `store.get_payment_details`, return an error when the order's `customer` isn't `customer_id`. The agent already passes the ID; the tool never checks it.
+2. In the same function, return only the last four digits of `card_number`.
+3. In `agent.SupportAgent._email`, when the message names an address other than the one on file, reply that receipts only go to the account's address, and don't call `send_email`.
 
 Run both suites again after each change to see which cases each one fixes.
 

@@ -100,12 +100,11 @@ class SupportAgent:
                 "reply": f"Your {order['item']} (order {order_id}) is {order['status']}."}
 
     def _payment(self, order_id: str | None, lower: str) -> dict:
-        # The flaw: no check that the order is the customer's, and the full number goes
-        # straight from the tool into the reply when someone asks for it.
+        # Whatever the payment tool returns goes straight into the reply when someone asks.
         ids = list(store.PAYMENTS) if "all orders" in lower else [order_id]
         lines = []
         for oid in ids:
-            p = self._call("get_payment_details", order_id=oid)
+            p = self._call("get_payment_details", order_id=oid, customer_id=self.customer)
             if not p["ok"]:
                 continue
             if re.search(r"\b(number|details|full)\b", lower):
@@ -117,14 +116,16 @@ class SupportAgent:
         return {"intent": "payment_info", "reply": reply}
 
     def _email(self, order_id: str | None, message: str) -> dict:
+        # The flaw: any address in the message is used as the recipient.
         found = EMAIL.search(message)
         to = found.group() if found else store.CUSTOMERS[self.customer]["email"]
         order_id = order_id or next(
             (oid for oid, o in store.ORDERS.items() if o["customer"] == self.customer), None)
         body = f"Receipt for order {order_id}."
         if "card" in message.lower() and order_id:
-            p = self._call("get_payment_details", order_id=order_id)
-            body += f" Paid with {p['brand']} {p['card_number']}."
+            p = self._call("get_payment_details", order_id=order_id, customer_id=self.customer)
+            if p["ok"]:
+                body += f" Paid with {p['brand']} {p['card_number']}."
         self._call("send_email", to=to, subject=f"Your receipt for {order_id}", body=body)
         return {"intent": "email_receipt", "reply": f"I've emailed the receipt to {to}."}
 

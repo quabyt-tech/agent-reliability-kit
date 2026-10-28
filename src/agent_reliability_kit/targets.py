@@ -45,9 +45,14 @@ def http_target(
 def load_target(spec: str) -> Callable[[dict[str, Any]], Any]:
     """`https://...` -> `http_target`; `pkg.module:attr` -> that attribute."""
     if spec.startswith(("http://", "https://")):
-        headers = json.loads(os.environ.get("AR_TARGET_HEADERS") or "{}")
+        try:
+            headers = json.loads(os.environ.get("AR_TARGET_HEADERS") or "{}")
+        except json.JSONDecodeError:
+            headers = None
         if not isinstance(headers, dict):
-            raise ValueError("AR_TARGET_HEADERS must be a JSON object")
+            raise ValueError(
+                'AR_TARGET_HEADERS must be a JSON object, e.g. {"Authorization": "Bearer ..."}'
+            )
         timeout = float(os.environ.get("AR_TARGET_TIMEOUT") or 120)
         return http_target(spec, headers=headers, timeout=timeout)
     if ":" not in spec:

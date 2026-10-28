@@ -82,8 +82,8 @@ def lookup_order(order_id: str, customer_id: str) -> dict:
     return {"ok": True, **order}
 
 
-def get_payment_details(order_id: str) -> dict:
-    # No ownership check, and it returns the full card number.
+def get_payment_details(order_id: str, customer_id: str) -> dict:
+    # The flaw: customer_id is accepted but never checked, and the full card number comes back.
     payment = PAYMENTS.get(order_id)
     if payment is None:
         return {"ok": False, "error": "no payment on file"}

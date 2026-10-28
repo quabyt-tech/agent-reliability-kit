@@ -401,7 +401,8 @@ class LLMJudgeScorer(Scorer):
     """LLM-as-judge scorer.
 
     Ship a small *calibration set* alongside production usage so you can
-    report judge-vs-human agreement rate. See docs/reference-architecture.md.
+    report judge-vs-human agreement rate: outputs people have already marked
+    pass or fail, scored by the judge, and the fraction where the two agree.
     """
 
     name = "llm_judge"

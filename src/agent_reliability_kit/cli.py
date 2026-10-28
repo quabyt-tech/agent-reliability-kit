@@ -86,12 +86,21 @@ def run(
     if os.getcwd() not in sys.path:
         sys.path.insert(0, os.getcwd())
     ds = Dataset.from_jsonl(dataset_path)
+    try:
+        target_fn = load_target(target)
+    except (ImportError, AttributeError, ValueError) as e:
+        raise typer.BadParameter(_load_hint(target, e), param_hint="--target") from e
+    try:
+        scorers = _import_attr(scorers_module)
+    except (ImportError, AttributeError) as e:
+        raise typer.BadParameter(_load_hint(scorers_module, e), param_hint="--scorers") from e
     console.print(f"[bold]Running[/bold] {len(ds)} cases from [cyan]{ds.name}[/cyan]")
-    harness = EvalHarness(
-        target=load_target(target), scorers=_import_attr(scorers_module), concurrency=concurrency
-    )
+    harness = EvalHarness(target=target_fn, scorers=scorers, concurrency=concurrency)
     result = harness.run(ds, tag=tag)
     _print_summary(result)
+    if result.total and result.errored == result.total:
+        console.print("[red]Every case errored, so nothing was scored. Check the target.[/red]")
+        raise typer.Exit(code=1)
 
     if analyze:
         label_model = _import_attr(analyze_model) if analyze_model else None
@@ -192,6 +201,13 @@ def _yaml() -> YAML:
 
 def _load(path: Path) -> Scorecard:
     return Scorecard(**_yaml().load(path.read_text(encoding="utf-8")))
+
+
+def _load_hint(spec: str, error: Exception) -> str:
+    msg = f"can't load {spec!r}: {error}"
+    if isinstance(error, ModuleNotFoundError) and error.name == spec.split(":")[0]:
+        msg += f". Run arkit from the folder that holds {error.name}.py."
+    return msg
 
 
 def _import_attr(spec: str):
