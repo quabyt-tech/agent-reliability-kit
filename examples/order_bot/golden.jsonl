@@ -1,0 +1,3 @@
+{"id": "g-status-01", "input": {"message": "Where is my order A100?"}, "expected": {"intent": "order_status"}}
+{"id": "g-refund-01", "input": {"message": "I want a refund for A100"}, "expected": {"intent": "refund"}}
+{"id": "g-other-01", "input": {"message": "Do you sell gift cards?"}, "expected": {"intent": "other"}}
