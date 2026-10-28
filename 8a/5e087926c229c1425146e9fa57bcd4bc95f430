@@ -1,0 +1,34 @@
+CONTRIBUTING.md
+  s_99cfc925776610::t_a678e438d487b6 8-10
+pyproject.toml
+  s_99cfc925776610::t_65e4ab4f3a6177 25
+.github/workflows/ci.yml
+  s_99cfc925776610::t_32f744eed9583f 14
+  s_99cfc925776610::t_70a38d4dcc855b 16-21,32-33,35
+README.md
+  s_99cfc925776610::t_285fb624d4a590 49-51,54-57
+  s_99cfc925776610::t_f0f1940bdfe167 13-14,16-17
+  s_99cfc925776610::t_60d455b568ec60 20
+.python-version
+  s_99cfc925776610::t_1aabc6e20132e5 1
+src/agent_reliability_kit/audit/scorecard.py
+  s_99cfc925776610::t_9621654900e3a1 11,106
+uv.lock
+  s_99cfc925776610::t_08ccad2fa03ddc 1-765
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a5e087926c229c1425146e9fa57bcd4bc95f430",
+  "prompts": {},
+  "sessions": {
+    "s_99cfc925776610": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2517985c-948d-4e5b-ac57-778e5c5e47bb",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Pushpendra Singh <ps@quabyt.com>"
+    }
+  }
+}
