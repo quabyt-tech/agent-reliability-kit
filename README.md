@@ -6,7 +6,7 @@ An eval harness that gates CI per attack class, and a scorecard for deciding whe
 - **Trap classes.** Tag adversarial cases with one of six attack classes from the [AI Agent Traps](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6372438) paper. Pass rates are reported and gated per class, so a solid prompt-injection score can't hide a 40% data-exfiltration score.
 - **Scorecard.** Eight weighted dimensions, from eval coverage to deployment, scored 0 to 5 with evidence. Render it as Markdown or a self-contained HTML page, and diff it month to month.
 
-Apache-2.0. Five dependencies (pydantic, pyyaml, httpx, rich, typer), no vendor SDKs, and nothing phones home.
+Apache-2.0. Five dependencies (pydantic, ruamel.yaml, httpx, rich, typer), no vendor SDKs, and nothing phones home.
 
 ## Install
 
@@ -26,7 +26,7 @@ uvx --from git+https://github.com/quabyt-tech/agent-reliability-kit arkit --help
 
 `uvx` runs from a temporary environment and leaves your folder untouched. That environment holds only the kit, so it suits HTTP targets and the `template`, `report` and `diff` commands; a Python agent target needs its own dependencies, so use `uv add` for that.
 
-Python 3.11 to 3.14. PyYAML doesn't publish 3.15 builds yet, so on 3.15 it needs a C compiler to install. A PyPI release is coming; until then, install from GitHub as above.
+Python 3.11 or newer. A PyPI release is coming; until then, install from GitHub as above.
 
 ## Run an eval
 

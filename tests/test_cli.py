@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import yaml
+from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
 from agent_reliability_kit.cli import app
@@ -33,10 +33,10 @@ def test_template_report_and_diff(tmp_path: Path):
     before = tmp_path / "before.yaml"
     assert runner.invoke(app, ["template", str(before)]).exit_code == 0
 
-    data = yaml.safe_load(before.read_text())
+    data = YAML(typ="safe", pure=True).load(before.read_text())
     data["scores"][0]["score"] = 3
     after = tmp_path / "after.yaml"
-    after.write_text(yaml.safe_dump(data))
+    YAML(typ="safe", pure=True).dump(data, after)
 
     html = tmp_path / "report.html"
     res = runner.invoke(app, ["report", str(after), "--previous", str(before), "-o", str(html)])

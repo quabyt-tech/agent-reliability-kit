@@ -14,9 +14,9 @@ import sys
 from pathlib import Path
 
 import typer
-import yaml
 from rich.console import Console
 from rich.table import Table
+from ruamel.yaml import YAML
 
 from . import __version__
 from .audit.html_report import render_html
@@ -115,7 +115,8 @@ def template(out: Path = typer.Argument(..., dir_okay=False)) -> None:
         "top_risks": [],
         "notes": "",
     }
-    out.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
+    with out.open("w", encoding="utf-8") as f:
+        _yaml().dump(payload, f)
     console.print(f"[green]Wrote[/green] {out}")
 
 
@@ -166,8 +167,16 @@ def diff(
     )
 
 
+def _yaml() -> YAML:
+    # Pure-Python YAML: installs on any Python version without a C compiler.
+    y = YAML(typ="safe", pure=True)
+    y.default_flow_style = False
+    y.representer.sort_base_mapping_type_on_output = False  # keep template field order
+    return y
+
+
 def _load(path: Path) -> Scorecard:
-    return Scorecard(**yaml.safe_load(path.read_text(encoding="utf-8")))
+    return Scorecard(**_yaml().load(path.read_text(encoding="utf-8")))
 
 
 def _import_attr(spec: str):
