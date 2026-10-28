@@ -121,9 +121,9 @@ _PAGE = Template("""<!doctype html>
 <title>$title</title>
 <style>
 :root { --bg:#fbfaf7; --fg:#1d1c1a; --muted:#6b6862; --line:#e4e1da; --card:#fff;
-  --accent:#2f5d50; --up:#2f7d4f; --down:#b3412e; }
+  --accent:#2f5d50; --up:#2f7d4f; --down:#b3412e; --warn:#c98a1b; }
 @media (prefers-color-scheme: dark) { :root { --bg:#161614; --fg:#ecebe6; --muted:#a19e96;
-  --line:#2e2d2a; --card:#1f1e1b; --accent:#7fb8a4; --up:#6cc28f; --down:#e2806c; } }
+  --line:#2e2d2a; --card:#1f1e1b; --accent:#7fb8a4; --up:#6cc28f; --down:#e2806c; --warn:#e0b05a; } }
 * { box-sizing:border-box }
 body { margin:0; background:var(--bg); color:var(--fg);
   font:15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -142,9 +142,13 @@ th { font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(-
 .num { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
 .up { color:var(--up); font-weight:600; } .down { color:var(--down); font-weight:600; }
 .barcell { width:30%; }
-.bar { height:8px; background:var(--line); border-radius:4px; margin-top:7px; }
+.bar { position:relative; height:8px; background:var(--line); border-radius:4px; margin-top:7px; }
 .bar span { display:block; height:100%; border-radius:4px; background:var(--accent); }
 .bar .lvl0, .bar .lvl1 { background:var(--down); }
+.bar .lvl2 { background:var(--warn); }
+/* tick at 3/5, the production bar */
+.bar::after { content:""; position:absolute; left:60%; top:-4px; width:2px; height:16px;
+  background:var(--fg); opacity:.45; }
 article { background:var(--card); border:1px solid var(--line); border-radius:8px;
   padding:16px 18px; margin:12px 0; }
 article p { margin:6px 0; }

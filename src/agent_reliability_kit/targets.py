@@ -1,10 +1,10 @@
 """Resolve a `--target` spec: a Python `module:callable`, or an HTTP(S) endpoint.
 
-The HTTP form is what lets the CLIs test an agent written in any language, or one
-the client would rather not import into our process: each case's `input` is POSTed
+The HTTP form is what lets the CLI test an agent written in any language, or one
+you'd rather not import into the test process: each case's `input` is POSTed
 as the JSON body and the JSON response is the output scorers see.
 
-    ar-eval run golden.jsonl -t https://staging.example.com/agent/invoke -s my_scorers:SCORERS
+    arkit run golden.jsonl -t https://staging.example.com/agent/invoke -s my_scorers:SCORERS
 
 Request headers come from `AR_TARGET_HEADERS` (a JSON object), not a flag, so a
 bearer token stays out of shell history and CI logs. `AR_TARGET_TIMEOUT` is in
