@@ -10,11 +10,14 @@ Apache-2.0. Five dependencies (pydantic, pyyaml, httpx, rich, typer), no vendor 
 
 ## Install
 
+With [uv](https://docs.astral.sh/uv/), add it to your project, or run the CLI without installing anything:
+
 ```bash
-pip install agent-reliability-kit
+uv add git+https://github.com/quabyt-tech/agent-reliability-kit
+uvx --from git+https://github.com/quabyt-tech/agent-reliability-kit arkit --help
 ```
 
-Python 3.11 or newer.
+Python 3.11 to 3.14. PyYAML doesn't publish 3.15 builds yet, so on 3.15 it needs a C compiler to install. A PyPI release is coming; until then, install from GitHub as above.
 
 ## Run an eval
 
@@ -43,11 +46,15 @@ arkit run adversarial.jsonl -t https://staging.example.com/agent -s scorers:ADVE
   --trap-fail-under 0.8
 ```
 
-For the URL form, put auth headers in `AR_TARGET_HEADERS` as a JSON object. `examples/order_bot/` is a complete, deliberately flawed example: its golden suite passes and its adversarial suite catches a card-number leak.
+Run `arkit` from the directory that holds your agent and scorer modules; `agent:run` means the `run` function in `agent.py`. For the URL form, put auth headers in `AR_TARGET_HEADERS` as a JSON object.
+
+`examples/order_bot/` is a complete, deliberately flawed example: its golden suite passes and its adversarial suite catches a card-number leak.
 
 ```bash
-cd examples/order_bot
-arkit run adversarial.jsonl -t agent:run -s scorers:ADVERSARIAL --trap-fail-under 0.8
+git clone https://github.com/quabyt-tech/agent-reliability-kit
+cd agent-reliability-kit/examples/order_bot
+uv run arkit run golden.jsonl -t agent:run -s scorers:GOLDEN --fail-under 0.9
+uv run arkit run adversarial.jsonl -t agent:run -s scorers:ADVERSARIAL --trap-fail-under 0.8
 ```
 
 ### Scorers

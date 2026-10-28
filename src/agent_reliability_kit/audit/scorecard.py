@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -103,7 +103,7 @@ class Scorecard(BaseModel):
     client: str
     agent: str
     auditor: str = ""
-    audited_at: datetime = Field(default_factory=datetime.utcnow)
+    audited_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     scores: list[DimensionScore]
     top_risks: list[str] = Field(default_factory=list)
     notes: str = ""

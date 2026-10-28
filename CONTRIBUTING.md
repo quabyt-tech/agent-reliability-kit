@@ -5,9 +5,9 @@ Bug reports, new scorers and rubric improvements are all welcome.
 ## Set up
 
 ```bash
-uv venv && uv pip install -e ".[dev]"
-pytest
-ruff check . && mypy src
+uv sync
+uv run pytest
+uv run ruff check . && uv run mypy src
 ```
 
 ## What we'll merge
