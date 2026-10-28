@@ -1,0 +1,24 @@
+src/agent_reliability_kit/cli.py
+  s_99cfc925776610::t_3ce6d489ef2b07 34-48
+README.md
+  s_99cfc925776610::t_4d8f7290057cab 27,29-30
+  s_99cfc925776610::t_a15ff92a0cc1ca 28,31-35
+tests/test_cli.py
+  s_99cfc925776610::t_5eedce3a109064 16-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7152b669387371b2af4b953a96a9a966399195a8",
+  "prompts": {},
+  "sessions": {
+    "s_99cfc925776610": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2517985c-948d-4e5b-ac57-778e5c5e47bb",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Pushpendra Singh <ps@quabyt.com>"
+    }
+  }
+}
